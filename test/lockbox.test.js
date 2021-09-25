@@ -59,5 +59,32 @@ contract("LockBox", ([deployer, user1, user2]) => {
         from: user2,
       }).should.be.rejected;
     });
+
+    it("shows contents of an unlocked box", async () => {
+      await lockBox.setBoxLocked(lockBoxTokenId, false, {
+        from: user1,
+      });
+
+      const result = await lockBox.viewBoxContents(lockBoxTokenId, {
+        from: user2, // ANY user can view box contents if unlocked
+      });
+
+      const randoAddr = await randoNFT.address;
+      const ownerOfContents = await randoNFT.ownerOf(result.tokenId);
+
+      assert.equal(result.tokenContract, randoAddr);
+      assert.equal(result.tokenId, randoNFTId);
+      assert.equal(ownerOfContents, user1);
+    });
+
+    it("hides contents of a locked box", async () => {
+      await lockBox.setBoxLocked(lockBoxTokenId, true, {
+        from: user1,
+      });
+
+      await lockBox.viewBoxContents(lockBoxTokenId, {
+        from: user2,
+      }).should.be.rejected;
+    });
   });
 });
