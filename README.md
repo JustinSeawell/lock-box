@@ -11,6 +11,6 @@ A user can:
 - lock or unlock the LockBox
 - Transfer the LockBox (and it's contents) to other another address
 
-## Why did you make LockBox?
+## Why was LockBox created?
 
 Because it seemed cool at the time.
